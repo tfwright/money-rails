@@ -144,6 +144,12 @@ describe MoneyRails::ActiveRecord::Monetizable do
       @service.discount.currency_as_string.should == "EUR"
     end
 
+    it "sets field to nil, in nil assignments if allow_nil is set" do
+      @product.optional_price = nil
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
     context "for model with currency column:" do
       before :each do
         @transaction = Transaction.create(:amount_cents => 2400, :tax_cents => 600,
