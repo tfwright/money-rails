@@ -68,8 +68,9 @@ module MoneyRails
                         self.currency || Money.default_currency)
             }
             converter = Proc.new { |value|
-              return nil if options[:allow_nil] && value.nil?
-              if value.respond_to?(:to_money)
+              if options[:allow_nil] && value.blank?
+                nil
+              elsif value.respond_to?(:to_money)
                 value.to_money(field_currency_name || self.respond_to?(:currency) &&
                               self.currency || Money.default_currency)
               else
