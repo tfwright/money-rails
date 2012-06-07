@@ -37,6 +37,17 @@ describe MoneyRails::ActiveRecord::Monetizable do
       @product.save.should be_true
     end
 
+    it "doesn't allow nil by default" do
+      @product.price_cents = nil
+      @product.save.should be_false
+    end
+
+    it "allows nil if optioned" do
+      @product.optional_price_cents = nil
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
     it "uses Money default currency if :with_currency has not been used" do
       @service.discount.currency.should == Money::Currency.find(:eur)
     end
