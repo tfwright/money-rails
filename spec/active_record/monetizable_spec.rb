@@ -37,6 +37,17 @@ describe MoneyRails::ActiveRecord::Monetizable do
       @product.save.should be_true
     end
 
+    it "doesn't allow nil by default" do
+      @product.price_cents = nil
+      @product.save.should be_false
+    end
+
+    it "allows nil if optioned" do
+      @product.optional_price_cents = nil
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
     it "uses Money default currency if :with_currency has not been used" do
       @service.discount.currency.should == Money::Currency.find(:eur)
     end
@@ -133,6 +144,20 @@ describe MoneyRails::ActiveRecord::Monetizable do
       @service.discount.currency_as_string.should == "EUR"
     end
 
+    it "sets field to nil, in nil assignments if allow_nil is set" do
+      @product.optional_price = nil 
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
+    it "sets field to nil, in blank assignments if allow_nil is set" do
+      pending "composed_of doen't current support nil contructor values" do
+        @product.optional_price = "" 
+        @product.save.should be_true
+        @product.optional_price.should be_nil
+      end
+    end
+    
     context "for model with currency column:" do
       before :each do
         @transaction = Transaction.create(:amount_cents => 2400, :tax_cents => 600,
