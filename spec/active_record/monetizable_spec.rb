@@ -150,6 +150,24 @@ describe MoneyRails::ActiveRecord::Monetizable do
       @product.optional_price.should be_nil
     end
 
+    it "sets field to nil, when passed in a blank and allow_nil is set" do
+      @product.optional_price = ""
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
+    it "sets field to nil via attributes hash, when allow_nil is set" do
+      @product = Product.new :price_cents => 3000, :discount => 150, :bonus_cents => 200
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
+    it "sets field to nil via attributes hash, when passed in a blank and allow_nil is set" do
+      @product = Product.new :optional_price => "", :price_cents => 3000, :discount => 150, :bonus_cents => 200
+      @product.save.should be_true
+      @product.optional_price.should be_nil
+    end
+
     it "sets field to nil, in blank assignments if allow_nil is set" do
       pending "composed_of doen't current support nil contructor values" do
         @product.optional_price = "" 
